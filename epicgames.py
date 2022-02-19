@@ -5,6 +5,7 @@ from requests.auth import HTTPBasicAuth
 import json
 import os
 import argparse
+import urllib.parse
 
 class EpicGamesLauncher:
     def __init__(self, user_basic, pass_basic):
@@ -71,6 +72,7 @@ if __name__ == '__main__':
     parser.add_argument('--config', type=str, required=True)
 
     args = parser.parse_args()
+
     if os.path.exists(args.config):
         config = json.load(open(args.config, 'r'))
         if config.get('refresh_token') and config.get('username') and config.get('password'):
@@ -91,7 +93,7 @@ if __name__ == '__main__':
 
         print('[INFO] Apps in Library\n')
 
-        for item in eg.items:
+        for c,item in enumerate(eg.items):
             manifest = eg.fetch_item_manifest(item['catalogItemId'], item['namespace'], item['appName'])
 
             data = eg.fetch_download_metadata(manifest)
@@ -102,3 +104,18 @@ if __name__ == '__main__':
                 print('App Name: ', mfile['AppNameString'])
                 print('Manifest Version: ', mfile['ManifestFileVersion'])
                 print('--------')
+                
+                print('[INFO] Writing manifest for {} to manifests/manifest{}.json'.format(mfile['AppNameString'], c + 1))
+                if not os.path.exists('manifests'):
+                    os.mkdir('manifests')
+
+                # Add URI to manifest ...
+                prot = urllib.parse(data[0]['manifests'][0]['uri']).scheme
+                host = urllib.parse(data[0]['manifests'][0]['uri']).netloc
+
+
+                mfile['download_origin'] = '{}://{}/'.format(prot, host)
+
+                mfname = 'manifests/manifest{}.json'.format(c + 1)
+                json.dump(mfile, open(mfname, 'w'), indent=6)
+
