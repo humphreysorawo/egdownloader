@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 host = urllib.parse.urlparse(data[0]['manifests'][0]['uri']).netloc
 
 
-                mfile['download_origin'] = '{}://{}/'.format(prot, host)
+                mfile['download_origin'] = '{}://{}/Builds/Rocket/Automated/{}/CloudDir/'.format(prot, host, mfile['AppNameString'])
 
                 mfname = 'manifests/manifest{}.json'.format(c + 1)
                 json.dump(mfile, open(mfname, 'w'), indent=6)

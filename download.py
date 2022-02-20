@@ -2,13 +2,17 @@
 
 import json
 import os
+import requests
 
 import json_manifest
 
 class Downloader:
     def __init__(self):
         manifest = self.read_manifest('manifests/manifest4.json')
-        self.paths = self.get_chunk_paths(manifest)
+        download_origin = json.loads(manifest.decode('utf-8'))['download_origin']
+
+        self.download_urls = ['{}{}'.format(download_origin,path) \
+                for path in self.get_chunk_paths(manifest)]
 
     def get_chunk_paths(self, manifest):
         mf = json_manifest.JSONManifest.read_all(manifest)
@@ -21,5 +25,6 @@ class Downloader:
 
 if __name__ == '__main__':
     dw = Downloader()
-    for path in dw.paths:
-        print(path)
+    for url in dw.download_urls:
+        print(url)
+        

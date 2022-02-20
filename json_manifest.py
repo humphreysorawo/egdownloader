@@ -53,8 +53,8 @@ class JSONManifest(Manifest):
         _m.custom_fields._dict = _tmp.pop('CustomFields', dict())
 
         if _tmp.keys():
-            print(f'Did not read JSON keys: {_tmp.keys()}!')
-
+            #print(f'Did not read JSON keys: {_tmp.keys()}!')
+            pass
         # clear raw data after manifest has been loaded
         _m.data = b''
         _m.json_data = None
