@@ -108,10 +108,11 @@ if __name__ == '__main__':
                 print('[INFO] Writing manifest for {} to manifests/manifest{}.json'.format(mfile['AppNameString'], c + 1))
                 if not os.path.exists('manifests'):
                     os.mkdir('manifests')
+                print(data[0]['manifests'][0]['uri'])
 
                 # Add URI to manifest ...
-                prot = urllib.parse(data[0]['manifests'][0]['uri']).scheme
-                host = urllib.parse(data[0]['manifests'][0]['uri']).netloc
+                prot = urllib.parse.urlparse(data[0]['manifests'][0]['uri']).scheme
+                host = urllib.parse.urlparse(data[0]['manifests'][0]['uri']).netloc
 
 
                 mfile['download_origin'] = '{}://{}/'.format(prot, host)
